@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:mobile4/core/network/api_client.dart';
 import 'package:mobile4/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
-import 'package:mobile4/core/network/http_client.dart';
 
 class MahasiswaAktifRepository {
 // http version

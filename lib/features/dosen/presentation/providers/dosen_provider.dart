@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile4/core/network/api_client.dart';
-import 'package:mobile4/core/network/http_client.dart';
 import 'package:mobile4/features/dosen/data/models/dosen_model.dart';
 import 'package:mobile4/features/dosen/data/repositories/dosen_repository.dart';
 
