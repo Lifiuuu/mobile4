@@ -4,7 +4,7 @@ import 'package:mobile4/features/mahasiswa_aktif/data/models/mahasiswa_aktif_mod
 class MahasiswaAktifCard extends StatelessWidget {
   final MahasiswaAktifModel mahasiswa;
 
-  const MahasiswaAktifCard({Key? key, required this.mahasiswa}) : super(key: key);
+  const MahasiswaAktifCard({super.key, required this.mahasiswa});
 
   @override
   Widget build(BuildContext context) {

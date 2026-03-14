@@ -6,11 +6,11 @@ class ProfileMenuWidget extends StatelessWidget {
   final String value;
 
   const ProfileMenuWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

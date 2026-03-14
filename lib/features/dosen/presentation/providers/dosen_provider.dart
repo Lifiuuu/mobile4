@@ -1,10 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile4/core/network/api_client.dart';
+import 'package:mobile4/core/network/http_client.dart';
 import 'package:mobile4/features/dosen/data/models/dosen_model.dart';
 import 'package:mobile4/features/dosen/data/repositories/dosen_repository.dart';
 
-// Repository Provider
+//http version
+// final dosenRepositoryProvider = Provider<DosenRepository>((ref) {
+//   final client = ref.watch(httpClientProvider); // Ambil http.Client dari core
+//   return DosenRepository(client);
+// });
+
+// dio version
 final dosenRepositoryProvider = Provider<DosenRepository>((ref) {
-  return DosenRepository();
+  // Ambil instance Dio dari core
+  final dio = ref.watch(dioProvider); 
+  // Masukkan dio ke dalam DosenRepository
+  return DosenRepository(dio); 
 });
 
 // StateNotifier untuk mengelola state dosen
@@ -32,7 +43,7 @@ class DosenNotifier extends StateNotifier<AsyncValue<List<DosenModel>>> {
   }
 }
 
-// Dosen Notifier Provider
+
 final dosenNotifierProvider = StateNotifierProvider.autoDispose<DosenNotifier, AsyncValue<List<DosenModel>>>((ref) {
   final repository = ref.watch(dosenRepositoryProvider);
   return DosenNotifier(repository);

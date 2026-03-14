@@ -7,7 +7,8 @@ class AppConstants {
   
   // Keys
   static const String userPrefsKey = 'user_prefs';
-  
+  static const String baseUrl = 'https://jsonplaceholder.typicode.com';
+
   // Spacing
   static const double paddingSmall = 8.0;
   static const double paddingMedium = 16.0;

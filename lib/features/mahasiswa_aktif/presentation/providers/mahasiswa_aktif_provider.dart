@@ -1,8 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile4/core/network/http_client.dart';
 import 'package:mobile4/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
 import 'package:mobile4/features/mahasiswa_aktif/data/repositories/mahasiswa_aktif_repository.dart';
+import 'package:mobile4/core/network/api_client.dart';
 
-final mahasiswaAktifRepoProvider = Provider((ref) => MahasiswaAktifRepository());
+final mahasiswaAktifRepoProvider = Provider((ref) {
+// http version
+//   final client = ref.watch(httpClientProvider);
+//   return MahasiswaAktifRepository(client);
+// });
+
+// dio version
+  final dio = ref.watch(dioProvider);
+  return MahasiswaAktifRepository(dio);
+});
 
 class MahasiswaAktifNotifier extends StateNotifier<AsyncValue<List<MahasiswaAktifModel>>> {
   final MahasiswaAktifRepository _repo;
