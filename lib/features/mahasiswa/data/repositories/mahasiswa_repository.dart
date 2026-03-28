@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:mobile4/features/mahasiswa/data/models/mahasiswa_model.dart';
-import 'package:mobile4/core/network/api_client.dart';
+import 'package:mobile4/core/network/dio_client.dart';
 
 class MahasiswaRepository {
   //http version

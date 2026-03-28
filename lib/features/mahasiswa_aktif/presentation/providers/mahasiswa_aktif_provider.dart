@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile4/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
 import 'package:mobile4/features/mahasiswa_aktif/data/repositories/mahasiswa_aktif_repository.dart';
-import 'package:mobile4/core/network/api_client.dart';
+import 'package:mobile4/core/network/dio_client.dart';
 
 final mahasiswaAktifRepoProvider = Provider((ref) {
 // http version

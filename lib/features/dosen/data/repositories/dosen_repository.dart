@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile4/features/dosen/data/models/dosen_model.dart';
-import 'package:mobile4/core/network/api_client.dart';
+import 'package:mobile4/core/network/dio_client.dart';
 
 
 class DosenRepository {

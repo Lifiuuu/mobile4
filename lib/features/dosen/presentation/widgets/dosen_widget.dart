@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile4/core/constants/app_constants.dart';
 import 'package:mobile4/features/dosen/data/models/dosen_model.dart';
+import 'package:mobile4/features/dosen/presentation/providers/dosen_provider.dart';
 
 class ModernDosenCard extends StatefulWidget {
   final DosenModel dosen;
   final VoidCallback? onTap;
+  final VoidCallback? onSave;
   final List<Color>? gradientColors;
 
   const ModernDosenCard({
     super.key,
     required this.dosen,
     this.onTap,
+    this.onSave,
     this.gradientColors,
   });
 
@@ -149,21 +153,38 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                 ), // Expanded
 
                 // Arrow Icon
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: gradientColors[0].withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ), // BoxDecoration
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: gradientColors[0],
-                  ), // Icon
-                ), // Container
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Tambahkan Tombol Save di sini
+                    IconButton(
+                      icon: const Icon(Icons.save_outlined, size: 22),
+                      color: gradientColors[0],
+                      tooltip: 'Simpan ke Local Storage',
+                      onPressed: () {
+                        widget.onSave?.call();
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // Arrow Icon (Milikmu yang lama, digeser sedikit)
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: gradientColors[0].withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: gradientColors[0],
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            ), // Row
-          ), // Padding
+            ),
+          ),
         ), // Container
       ), // ScaleTransition
     ); // GestureDetector
@@ -320,7 +341,7 @@ class DosenEmptyState extends StatelessWidget {
   }
 }
 
-class DosenListView extends StatelessWidget {
+class DosenListView extends ConsumerWidget { // <-- Ubah jadi ConsumerWidget
   final List<DosenModel> dosenList;
   final VoidCallback onRefresh;
   final bool useModernCard;
@@ -333,7 +354,7 @@ class DosenListView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) { // <-- Tambah WidgetRef
    if (dosenList.isEmpty) {
       return DosenEmptyState(onrefresh: onRefresh);
     }
@@ -345,33 +366,52 @@ class DosenListView extends StatelessWidget {
         itemCount: dosenList.length,
         itemBuilder: (context, index) {
           final dosen = dosenList[index];
-          final gradientColors =
-              AppConstants.dashboardGradients[index % 
-                AppConstants.dashboardGradients.length];
+          final gradientColors = AppConstants.dashboardGradients[index % AppConstants.dashboardGradients.length];
           
           if (useModernCard) {
+            // Buat aksi save sekali, dan jangan pakai onTap untuk menyimpan.
+            Future<void> saveAction() async {
+              await ref.read(dosenNotifierProvider.notifier).saveSelectedDosen(dosen);
+              ref.invalidate(savedUsersProvider);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${dosen.nama} berhasil disimpan ke Local Storage!'),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            }
+
             return ModernDosenCard(
               dosen: dosen,
               gradientColors: gradientColors,
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Detail: ${dosen.nama}'),
-                    behavior: SnackBarBehavior.floating,
-                    duration: const Duration(seconds: 2),
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Gunakan ikon save untuk menyimpan ke Local Storage.'),
+                      behavior: SnackBarBehavior.floating,
                     ),
-                 );
+                  );
+                }
               },
+              onSave: () => saveAction(),
             );
           } else {
             return DosenCard(
               dosen: dosen,
               onTap: () {
+                if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Detail: ${dosen.nama}')
+                    const SnackBar(
+                      content: Text('Gunakan ikon save untuk menyimpan ke Local Storage.'),
+                      behavior: SnackBarBehavior.floating,
                     ),
                   );
-                },
+                }
+              },
             );
           } 
         },
